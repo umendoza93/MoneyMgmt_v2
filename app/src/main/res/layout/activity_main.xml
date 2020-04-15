@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:hint="(MM/DD/YY)"
+            android:hint="(YYYY/MM/DD)"
             android:inputType="date"
             android:textSize="14sp" />
 
@@ -83,6 +83,42 @@
         android:layout_height="625dp"
         android:orientation="vertical">
 
+        <TableRow
+            android:id="@+id/filterHeader"
+            android:layout_width="fill_parent"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="Stuff here">
+
+            <EditText
+                android:id="@+id/startDate"
+                android:layout_height="match_parent"
+                android:layout_width="111dp"
+                android:gravity="center"
+                android:hint="Start Date"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/endDate"
+                android:layout_width="111dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="End Date"
+                android:textSize="14sp"/>
+            <EditText
+                android:id="@+id/filterAmt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="Amount"
+                android:textSize="14sp"/>
+            <Button
+                android:id="@+id/btnFilter"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:text="Filter" />
+
+        </TableRow>
 
         <TextView
             android:id="@+id/txtID2"
@@ -91,6 +127,7 @@
             android:gravity="center|center_vertical"
             android:text="Transaction History"
             android:textColor="#000000" />
+
 
         <TableRow
             android:id="@+id/headerID"
@@ -129,7 +166,7 @@
         <ScrollView
             android:id="@+id/scrollID"
             android:layout_width="match_parent"
-            android:layout_height="390dp"
+            android:layout_height="422dp"
             android:layout_gravity="center"
             android:background="#FFFFFF"
             android:textColor="#000000"

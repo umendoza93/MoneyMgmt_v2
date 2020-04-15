@@ -17,8 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnPlus,btnMinus,btnClr;
-    EditText dateLine,amtLine,infoLine;
+    Button btnPlus,btnMinus,btnClr,btnFilter;
+    EditText dateLine,amtLine,infoLine,startDate,endDate,filterAmt;
     TextView blnLine,tblDateLIne, tblAmtLine, tblInfoLine;
     TableRow mainRow;
     SQLiteDatabase db;
@@ -36,10 +36,14 @@ public class MainActivity extends AppCompatActivity {
         tblInfoLine = findViewById(R.id.tblCatID);
         tblAmtLine = findViewById(R.id.tblAmtID);
         blnLine = findViewById(R.id.blnID);
+        startDate = findViewById(R.id.startDate);
+        endDate = findViewById(R.id.endDate);
+        filterAmt = findViewById(R.id.filterAmt);
 
         btnPlus = findViewById(R.id.btnPlus);
         btnMinus = findViewById(R.id.btnMinus);
         btnClr = findViewById(R.id.clrID);
+        btnFilter = findViewById(R.id.btnFilter);
 
         // Set current balance at the top and populate the content body
         db = openOrCreateDatabase("transaction.db", Context.MODE_PRIVATE,null);
@@ -121,6 +125,53 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tblDateLIne.setText("");
+                tblAmtLine.setText("");
+                tblInfoLine.setText("");
+                Cursor cursor;
+
+                if (!(startDate.getText().toString().isEmpty())) {
+
+                    String sql = "SELECT * FROM Transactions WHERE Date>=\"" + startDate.getText().toString() +"\"";
+                    Log.i("Info",sql);
+                    cursor = db.rawQuery(sql,null);
+
+                }
+                else if (!(startDate.getText().toString().isEmpty())&& !(endDate.getText().toString().isEmpty())) {
+                    String sql = "SELECT * FROM Transactions WHERE Date BETWEEN\"" + startDate.getText().toString() +
+                            "\" AND \"" + endDate.getText().toString() + "\"";
+                    Log.i("INFO", sql);
+                    cursor = db.rawQuery(sql, null);
+                }
+
+                /*while (cursor.moveToNext()) {
+                    String date = cursor.getString(0);
+                    double amt = cursor.getDouble(1);
+                    String cat = cursor.getString(2);
+
+                    String line1 = tblDateLIne.getText().toString();
+                    String line2 = tblAmtLine.getText().toString();
+                    String line3 = tblInfoLine.getText().toString();
+
+                    if (line1.length() == 0) {
+                        line1 = date;
+                        line2 = String.valueOf(amt);
+                        line3 = cat;
+                    } else {
+                        line1 = line1 + "\n" + date;
+                        line2 = line2 + "\n" + amt;
+                        line3 = line3 + "\n" + cat;
+                    }
+
+                    tblDateLIne.setText(line1);
+                    tblAmtLine.setText(line2);
+                    tblInfoLine.setText(line3);
+                }*/
+            }
+        });
     }
 
     // This will save the activity to the database
@@ -132,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
 
         String sql = "INSERT INTO Transactions VALUES " + activity.toSQL();
         db.execSQL(sql);
-
 
     }
 
