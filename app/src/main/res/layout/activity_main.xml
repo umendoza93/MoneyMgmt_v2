@@ -92,31 +92,43 @@
 
             <EditText
                 android:id="@+id/startDate"
+                android:layout_width="105dp"
                 android:layout_height="match_parent"
-                android:layout_width="111dp"
                 android:gravity="center"
                 android:hint="Start Date"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                tools:text="@tools:sample/date/mmddyy" />
 
             <EditText
                 android:id="@+id/endDate"
-                android:layout_width="111dp"
+                android:layout_width="105dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:hint="End Date"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                tools:text="@tools:sample/date/mmddyy" />
             <EditText
-                android:id="@+id/filterAmt"
-                android:layout_width="match_parent"
+                android:id="@+id/minAmt"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:hint="Amount"
+                android:hint="Min"
                 android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/maxAmt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="Max"
+                android:textSize="14sp" />
+
             <Button
                 android:id="@+id/btnFilter"
+                android:layout_width="71dp"
                 android:layout_height="match_parent"
-                android:layout_width="wrap_content"
                 android:text="Filter" />
+
 
         </TableRow>
 
@@ -181,7 +193,7 @@
                 <TableRow
                     android:id="@+id/rowID"
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
+                    android:layout_height="83dp"
                     android:gravity="center"
                     android:orientation="vertical">
 

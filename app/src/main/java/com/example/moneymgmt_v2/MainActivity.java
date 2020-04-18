@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     Button btnPlus,btnMinus,btnClr,btnFilter;
-    EditText dateLine,amtLine,infoLine,startDate,endDate,filterAmt;
+    EditText dateLine,amtLine,infoLine,startDate,endDate,minAmt,maxAmt;
     TextView blnLine,tblDateLIne, tblAmtLine, tblInfoLine;
     TableRow mainRow;
     SQLiteDatabase db;
@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         blnLine = findViewById(R.id.blnID);
         startDate = findViewById(R.id.startDate);
         endDate = findViewById(R.id.endDate);
-        filterAmt = findViewById(R.id.filterAmt);
+        minAmt = findViewById(R.id.minAmt);
+        maxAmt = findViewById(R.id.maxAmt);
 
         btnPlus = findViewById(R.id.btnPlus);
         btnMinus = findViewById(R.id.btnMinus);
@@ -132,22 +133,55 @@ public class MainActivity extends AppCompatActivity {
                 tblAmtLine.setText("");
                 tblInfoLine.setText("");
                 Cursor cursor;
+                String sql = "";
 
+                // Checks if there is at least a start date
                 if (!(startDate.getText().toString().isEmpty())) {
-
-                    String sql = "SELECT * FROM Transactions WHERE Date>=\"" + startDate.getText().toString() +"\"";
-                    Log.i("Info",sql);
+                    // Checks if there is also an end date
+                    if (!(endDate.getText().toString().isEmpty())) {
+                        // ALso checks if there is also a min amount
+                        if (!(minAmt.getText().toString().isEmpty())) {
+                            // Also checks if there is also a max amount
+                            if(!(maxAmt.getText().toString().isEmpty())) {
+                                sql = "SELECT * FROM Transactions WHERE Date BETWEEN \"" + startDate.getText().toString() +
+                                        "\" AND \"" + endDate.getText().toString() + "\" AND Price BETWEEN " +
+                                        minAmt.getText().toString() + " AND " + maxAmt.getText().toString();
+                            }
+                            else { // There is a start & end date AND a min & max amount
+                                sql = "SELECT * FROM Transactions WHERE Date BETWEEN \"" + startDate.getText().toString() +
+                                        "\" AND \"" + endDate.getText().toString() + "\" AND Price >= " + minAmt.getText().toString();
+                            }
+                        }
+                        else { // There is a start & end date AND at least a min amount
+                            sql = "SELECT * FROM Transactions WHERE Date BETWEEN \"" + startDate.getText().toString() +
+                                    "\" AND \"" + endDate.getText().toString() + "\"";
+                        }
+                    }
+                    else { // There is start & end date
+                        sql = "SELECT * FROM Transactions WHERE Date>=\"" + startDate.getText().toString() +"\"";
+                    }
                     cursor = db.rawQuery(sql,null);
-
                 }
-                else if (!(startDate.getText().toString().isEmpty())&& !(endDate.getText().toString().isEmpty())) {
-                    String sql = "SELECT * FROM Transactions WHERE Date BETWEEN\"" + startDate.getText().toString() +
-                            "\" AND \"" + endDate.getText().toString() + "\"";
-                    Log.i("INFO", sql);
-                    cursor = db.rawQuery(sql, null);
+                // Checks if there is at least min amount if there was no start date
+                else if (!(minAmt.getText().toString().isEmpty())) {
+                    // Also checks if there is also a max amount
+                    if (!(maxAmt.getText().toString().isEmpty())) {
+                        sql = "SELECT * FROM Transactions WHERE Price BETWEEN " + minAmt.getText().toString() +
+                                " AND " + maxAmt.getText().toString();
+                    }
+                    else { // There is a min & max amount
+                        sql = "SELECT * FROM Transactions WHERE Price >=" + minAmt.getText().toString();
+                    }
+
+                    cursor = db.rawQuery(sql,null);
+                }
+                // if there's no filter range for dates and amount
+                else {
+                    LoadActivity();
+                    return;
                 }
 
-                /*while (cursor.moveToNext()) {
+                while (cursor.moveToNext()) {
                     String date = cursor.getString(0);
                     double amt = cursor.getDouble(1);
                     String cat = cursor.getString(2);
@@ -169,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     tblDateLIne.setText(line1);
                     tblAmtLine.setText(line2);
                     tblInfoLine.setText(line3);
-                }*/
+                }
             }
         });
     }
